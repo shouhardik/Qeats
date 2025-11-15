@@ -1,7 +1,17 @@
 package com.crio.qeats.controller;
 
+import com.crio.qeats.exchanges.AddCartItemRequest;
+import com.crio.qeats.exchanges.ClearCartRequest;
+import com.crio.qeats.exchanges.GetCartResponse;
+import com.crio.qeats.exchanges.GetMenuResponse;
+import com.crio.qeats.exchanges.GetOrdersResponse;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
+import com.crio.qeats.exchanges.PostOrderRequest;
+import com.crio.qeats.exchanges.PostOrderResponse;
+import com.crio.qeats.services.CartService;
+import com.crio.qeats.services.MenuService;
+import com.crio.qeats.services.OrderService;
 import com.crio.qeats.services.RestaurantService;
 import java.time.LocalTime;
 import javax.validation.Valid;
@@ -33,6 +43,15 @@ public class RestaurantController {
 
   @Autowired
   private RestaurantService restaurantService;
+
+  @Autowired
+  private MenuService menuService;
+
+  @Autowired
+  private CartService cartService;
+
+  @Autowired
+  private OrderService orderService;
 
 
 
@@ -70,38 +89,20 @@ public class RestaurantController {
     return ResponseEntity.ok().body(getRestaurantsResponse);
   }
 
-  // TIP(MODULE_MENUAPI): Model Implementation for getting menu given a restaurantId.
-  // Get the Menu for the given restaurantId
-  // API URI: /qeats/v1/menu?restaurantId=11
-  // Method: GET
-  // Query Params: restaurantId
-  // Success Output:
-  // 1). If restaurantId is present return Menu
-  // 2). Otherwise respond with BadHttpRequest.
-  //
-  // HTTP Code: 200
-  // {
-  //  "menu": {
-  //    "items": [
-  //      {
-  //        "attributes": [
-  //          "South Indian"
-  //        ],
-  //        "id": "1",
-  //        "imageUrl": "www.google.com",
-  //        "itemId": "10",
-  //        "name": "Idly",
-  //        "price": 45
-  //      }
-  //    ],
-  //    "restaurantId": "11"
-  //  }
-  // }
-  // Error Response:
-  // HTTP Code: 4xx, if client side error.
-  //          : 5xx, if server side error.
-  // Eg:
-  // curl -X GET "http://localhost:8081/qeats/v1/menu?restaurantId=11"
+  @GetMapping(MENU_API)
+  public ResponseEntity<GetMenuResponse> getMenu(
+      @RequestParam(value = "restaurantId", required = true) String restaurantId) {
+    
+    if (restaurantId == null || restaurantId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("getMenu called with restaurantId: {}", restaurantId);
+    GetMenuResponse getMenuResponse = menuService.findMenuByRestaurantId(restaurantId);
+    log.info("getMenu returned {}", getMenuResponse);
+    
+    return ResponseEntity.ok().body(getMenuResponse);
+  }
 
 
 
@@ -109,5 +110,116 @@ public class RestaurantController {
 
 
 
+
+
+
+  @GetMapping(CART_API)
+  public ResponseEntity<GetCartResponse> getCart(
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("getCart called with userId: {}", userId);
+    GetCartResponse getCartResponse = cartService.findCartByUserId(userId);
+    log.info("getCart returned {}", getCartResponse);
+    
+    return ResponseEntity.ok().body(getCartResponse);
+  }
+
+  @PostMapping(CART_ITEM_API)
+  public ResponseEntity<GetCartResponse> addItemToCart(
+      @RequestBody AddCartItemRequest addCartItemRequest,
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("addItemToCart called with request: {} and userId: {}", addCartItemRequest, userId);
+    try {
+      GetCartResponse getCartResponse = cartService.addItemToCart(addCartItemRequest, userId);
+      log.info("addItemToCart returned {}", getCartResponse);
+      return ResponseEntity.ok().body(getCartResponse);
+    } catch (Exception e) {
+      log.error("Error adding item to cart", e);
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
+
+  @DeleteMapping(CART_ITEM_API)
+  public ResponseEntity<GetCartResponse> removeItemFromCart(
+      @RequestBody AddCartItemRequest removeCartItemRequest,
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("removeItemFromCart called with request: {} and userId: {}", removeCartItemRequest, userId);
+    try {
+      GetCartResponse getCartResponse = cartService.removeItemFromCart(removeCartItemRequest, userId);
+      log.info("removeItemFromCart returned {}", getCartResponse);
+      return ResponseEntity.ok().body(getCartResponse);
+    } catch (Exception e) {
+      log.error("Error removing item from cart", e);
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
+
+  @PostMapping(CART_CLEAR_API)
+  public ResponseEntity<GetCartResponse> clearCart(
+      @RequestBody ClearCartRequest clearCartRequest,
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("clearCart called with request: {} and userId: {}", clearCartRequest, userId);
+    try {
+      GetCartResponse getCartResponse = cartService.clearCart(clearCartRequest, userId);
+      log.info("clearCart returned {}", getCartResponse);
+      return ResponseEntity.ok().body(getCartResponse);
+    } catch (Exception e) {
+      log.error("Error clearing cart", e);
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
 }
 
+  @PostMapping(POST_ORDER_API)
+  public ResponseEntity<PostOrderResponse> placeOrder(
+      @RequestBody PostOrderRequest postOrderRequest,
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("placeOrder called with request: {} and userId: {}", postOrderRequest, userId);
+    try {
+      PostOrderResponse postOrderResponse = orderService.placeOrder(postOrderRequest, userId);
+      log.info("placeOrder returned {}", postOrderResponse);
+      return ResponseEntity.ok().body(postOrderResponse);
+    } catch (Exception e) {
+      log.error("Error placing order", e);
+      return ResponseEntity.badRequest().body(null);
+    }
+  }
+
+  @GetMapping(GET_ORDERS_API)
+  public ResponseEntity<GetOrdersResponse> getOrders(
+      @RequestParam(value = "userId", required = true) String userId) {
+    
+    if (userId == null || userId.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(null);
+    }
+    
+    log.info("getOrders called with userId: {}", userId);
+    GetOrdersResponse getOrdersResponse = orderService.getOrdersByUserId(userId);
+    log.info("getOrders returned {}", getOrdersResponse);
+    
+    return ResponseEntity.ok().body(getOrdersResponse);
+  }
