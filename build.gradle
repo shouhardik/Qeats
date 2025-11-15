@@ -1,11 +1,5 @@
 import java.time.Duration
 
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 //////////////////////////////// DO NOT CHANGE THIS FILE //////////////////////////////////
 
 plugins {

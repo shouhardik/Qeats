@@ -1,5 +1,3 @@
-// CRIO_SOLUTION_AND_STUB_START_MODULE_SERIALIZATION
-// CRIO_SOLUTION_AND_STUB_END_MODULE_SERIALIZATION
 #!/bin/bash
 
 lat=12.9
@@ -12,7 +10,6 @@ then
     lat=$latitude
 else
   echo "latitude value not set in coordinates.txt, using default"
-  echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
 fi
 
 if test $longitude
@@ -20,19 +17,17 @@ then
     lng=$longitude
 else
     echo "$longitude value not set in coordinates.txt, using default"
-    echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
 fi
 
 echo -e "Please note down location coordinates which we are populating data for - \n( latitude = $lat, longitude = $lng )"
 echo "If you think this is incorrect, check your coordinates.txt file."
-echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
 
 cd ~/workspace
 # Either clone or pull latest.
 QEATS_SHARED_RESOURCES="${HOME}/workspace/qeats_shared_resources"
 if [ ! -d $QEATS_SHARED_RESOURCES ]
 then
-    git clone git@gitlab.crio.do:me_qeats_shared/qeats_shared_resources.git $QEATS_SHARED_RESOURCES
+    # git clone command removed
 else
     cd $QEATS_SHARED_RESOURCES
     git pull

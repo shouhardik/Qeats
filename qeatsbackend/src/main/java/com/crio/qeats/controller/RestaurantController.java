@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.controller;
 
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
@@ -23,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-// Implement Controller using Spring annotations.
-// Remember, annotations have various "targets". They can be class level, method level or others.
 @Log4j2
 @RestController
 @RequestMapping(RestaurantController.RESTAURANT_API_ENDPOINT)

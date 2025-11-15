@@ -112,14 +112,6 @@ public class RestaurantServiceMockitoTestStub {
 
     restaurant4 = restaurants[3];
 
-  // TODO CRIO_TASK_MODULE_MOCKITO
-
-  // What to do with this Restaurant[] ? Looks unused?
-
-  // Look for the "assert" statements in the tests
-
-  // following and find out what to do with the array.
-
  }
 
 
@@ -231,18 +223,6 @@ public class RestaurantServiceMockitoTestStub {
   GetRestaurantsResponse allRestaurantsCloseByOffPeakHours;
 
   GetRestaurantsResponse allRestaurantsCloseByPeakHours;
-
-
-
-  // TODO: CRIO_TASK_MODULE_MOCKITO
-
- //  Call restaurantService.findAllRestaurantsCloseBy with appropriate parameters such that
-
- //  Both of the mocks created above are called.
-
- //  Our assessment will verify whether these mocks are called as per the definition.
-
- //  Refer to the assertions below in order to understand the requirements better.
 
 
 

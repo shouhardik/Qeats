@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.repositoryservices;
 
 import ch.hsr.geohash.GeoHash;
@@ -60,11 +54,6 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
     return time.isAfter(openingTime) && time.isBefore(closingTime);
   }
 
-  // TODO: CRIO_TASK_MODULE_NOSQL
-  // Objectives:
-  // 1. Implement findAllRestaurantsCloseby.
-  // 2. Remember to keep the precision of GeoHash in mind while using it as a key.
-  // Check RestaurantRepositoryService.java file for the interface contract.
   public List<Restaurant> findAllRestaurantsCloseBy(Double latitude,
       Double longitude, LocalTime currentTime, Double servingRadiusInKms) {
 
@@ -127,10 +116,6 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
 
 
 
-  // TODO: CRIO_TASK_MODULE_NOSQL
-  // Objective:
-  // 1. Check if a restaurant is nearby and open. If so, it is a candidate to be returned.
-  // NOTE: How far exactly is "nearby"?
 
   /**
    * Utility method to check if a restaurant is within the serving radius at a given time.
